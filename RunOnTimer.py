@@ -1,3 +1,5 @@
+import pytz
+
 from types import FunctionType, BuiltinMethodType, BuiltinFunctionType
 from functools import partial
 from datetime import datetime as dt
@@ -53,12 +55,17 @@ class RunOnTimer:
     to True* Dictionary or None (Not Currently Implemented)
         -Defaults to None
 
+    :param tz: String or None
+        -if none the program will default to treating times as being in the UTC
+        -
+
     :param params: a value, dict, or list of parameters to be passed to the function to run as
     **kwargs or None
         -Defaults to None
         -in a future version this should check to see if the params are a
         single value (not a list or a dictionary), a list (which will be
         treated as * args) or a dict (which will be treated as **kwargs)
+    
 
 
     ---------------------------------------------------------------------------
@@ -66,9 +73,9 @@ class RunOnTimer:
     ---------------------------------------------------------------------------
     Run the print_hi function daily for the next two days at noon without
     providing any kwargs to the print hi function.  If this is run prior to
-    noon it will trigger the print_hi function at noon on the day the run is
-    started and the next day.  If run after noon it will trigger the next day
-    and the day after.
+    noon it will trigger the print_hi function at noon (PST) on the day the run 
+    is started and the next day.  If run after noon (PST) it will trigger the 
+    next day and the day after.
 
     def print_hi():
         now = dt.now()
@@ -82,15 +89,16 @@ class RunOnTimer:
             'iterations': 2,
             'stop_date':None,
             'fail_check':False,
-            'fail_check_responses':None
+            'fail_check_responses':None,
+            'tz': 'America/Los_Angeles'
         }
     )
 
     Run the print_hi function daily at noon until the 15th of June providing
     kwargs to the print_hi function.  If this is run prior to noon it will
-    trigger the print_hi function at noon on the day the run is started and the
-    next day.  If run after noon it will trigger the next day and the day
-    after.
+    trigger the print_hi function at noon (PST) on the day the run is started 
+    and the next day.  If run after noon (PST) it will trigger the next day and 
+    the day after.
 
     def print_hi(**kwargs):
         now = dt.now()
@@ -104,6 +112,7 @@ class RunOnTimer:
         stop_date="2020/06/15",
         fail_check=False,
         fail_check_responses=None,
+        'tz': 'America/Los_Angeles',
         params={'name':'David'}
     )
     """
@@ -116,6 +125,7 @@ class RunOnTimer:
         self.stop_date = None
         self.fail_check = None
         self.fail_check_responses = None
+        self.tz = pytz.utc
         self.current_iteration = 0
         self.last_run = None
         self.params = None
@@ -231,6 +241,10 @@ class RunOnTimer:
             self.params = self.kwargs["params"]
         else:
             pass
+        if "tz" in self.kwargs.keys():
+            self.tz = pytz.timezone(self.kwargs["tz"])
+        else:
+            pass
 
     def check_date(self):
         """
@@ -318,16 +332,16 @@ class RunOnTimer:
         :return: 1
         """
         try:
-            if self.trigger_time == dt.now().strftime("%H:%M:%S"):
+            if self.trigger_time == self.tz.localize(dt.now().strftime("%H:%M:%S")):
                 return 1
             else:
-                run_time_string = dt.now().date().strftime("%Y/%m/%d") + \
+                run_time_string = self.tz.localize(dt.now()).date().strftime("%Y/%m/%d") + \
                     " " + self.trigger_time
                 run_time = dt.strptime(run_time_string, "%Y/%m/%d %H:%M:%S")
                 if run_time > dt.now():
-                    sleep((run_time - dt.now()).total_seconds())
+                    sleep((run_time - self.tz.localize(dt.now())).total_seconds())
                 else:
-                    sleep((dt.now() - run_time).total_seconds())
+                    sleep((self.tz.localize(dt.now()) - run_time).total_seconds())
                 return 1
         except TypeError:
             raise TypeError("The trigger time value of {} does not " + \
