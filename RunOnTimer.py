@@ -57,7 +57,7 @@ class RunOnTimer:
 
     :param tz: String or None
         -if none the program will default to treating times as being in the UTC
-        -
+        -see the pytz documentation for a full list of timezones
 
     :param params: a value, dict, or list of parameters to be passed to the function to run as
     **kwargs or None
@@ -81,17 +81,15 @@ class RunOnTimer:
         now = dt.now()
         print('Hi {}!  It is currently {}'.format('No Kwargs ', now))
 
-    TriggerTimer(
+    RunOnTimer(
         print_hi,
-        **{
-            'frequency':'daily',
-            'trigger_time':'12:00:00',
-            'iterations': 2,
-            'stop_date':None,
-            'fail_check':False,
-            'fail_check_responses':None,
-            'tz': 'America/Los_Angeles'
-        }
+        frequency='daily',
+        trigger_time='12:00:00',
+        iterations=2,
+        stop_date=None,
+        fail_check=False,
+        fail_check_responses=None,
+        tz='America/Los_Angeles'
     )
 
     Run the print_hi function daily at noon until the 15th of June providing
@@ -104,7 +102,7 @@ class RunOnTimer:
         now = dt.now()
         print('Hi {}!  It is currently {}'.format(kwargs['name'], now))
 
-    TriggerTimer(
+    RunOnTimer(
         print_hi,
         frequency='daily',
         trigger_time='12:00:00',
@@ -112,7 +110,7 @@ class RunOnTimer:
         stop_date="2020/06/15",
         fail_check=False,
         fail_check_responses=None,
-        'tz': 'America/Los_Angeles',
+        tz='America/Los_Angeles',
         params={'name':'David'}
     )
     """
