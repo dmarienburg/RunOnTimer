@@ -1,3 +1,4 @@
+"A flexible wrapper for running a function a set, timzone aware, interval"
 import pytz
 
 from types import FunctionType, BuiltinMethodType, BuiltinFunctionType
@@ -278,10 +279,10 @@ class RunOnTimer:
 
         if not self.last_run:
             return 1
-        elif (self.last_run + delta_value) <= dt.now().date():
+        elif self.tz.localize(self.last_run + delta_value) <= self.tz.localize(dt.now()).date():
             return 1
-        elif (self.last_run + delta_value) > dt.now().date():
-            sleep(((self.last_run + delta_value) - dt.now().date()).total_seconds())
+        elif self.tz.localize(self.last_run + delta_value) > self.tz.localize(dt.now()).date():
+            sleep((self.tz.localize(self.last_run + delta_value) - self.tz.localize(dt.now()).date()).total_seconds())
             return 1
         else:
             return 0
@@ -330,21 +331,24 @@ class RunOnTimer:
         :return: 1
         """
         try:
-            if self.trigger_time == self.tz.localize(dt.now().strftime("%H:%M:%S")):
+            if self.trigger_time == self.tz.localize(dt.now()).strftime("%H:%M:%S"):
                 return 1
             else:
                 run_time_string = self.tz.localize(dt.now()).date().strftime("%Y/%m/%d") + \
                     " " + self.trigger_time
                 run_time = dt.strptime(run_time_string, "%Y/%m/%d %H:%M:%S")
                 if run_time > dt.now():
-                    sleep((run_time - self.tz.localize(dt.now())).total_seconds())
+                    sleep((self.tz.localize(run_time) - self.tz.localize(dt.now())).total_seconds())
                 else:
-                    sleep((self.tz.localize(dt.now()) - run_time).total_seconds())
+                    sleep((self.tz.localize(dt.now()+td(hours=19))-self.tz.localize(dt.now())))
+                    self.check_time()
                 return 1
         except TypeError:
-            raise TypeError("The trigger time value of {} does not " + \
-                "follow the H:M:S 24hr clock time format".format(
-                self.trigger_time))
+           raise TypeError
+            (
+                f"The trigger time value of {self.trigger_time} does not "
+                f"follow the H:M:S 24hr clock time format"
+            )
         except ValueError as e:
             raise ValueError(e)
 
