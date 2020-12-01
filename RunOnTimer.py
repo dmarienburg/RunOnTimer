@@ -343,12 +343,8 @@ class RunOnTimer:
                     sleep((self.tz.localize(dt.now()+td(hours=19))-self.tz.localize(dt.now())))
                     self.check_time()
                 return 1
-        except TypeError:
-           raise TypeError
-            (
-                f"The trigger time value of {self.trigger_time} does not "
-                f"follow the H:M:S 24hr clock time format"
-            )
+        except TypeError as t:
+           raise TypeError(t)
         except ValueError as e:
             raise ValueError(e)
 
