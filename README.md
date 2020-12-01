@@ -5,11 +5,70 @@
 The timer library is built to allow a user to set an interval and the function
 will run a method/function provided as a parameter at that interval.
 
+As of version 0.6 the timer is timezone aware defaulting to utc.
+
+***
+
+## Example of Use
+
+***
+
+To run the print_hi function daily for the next two days at noon without
+providing any kwargs to the print hi function.  If this is run prior to
+noon it will trigger the print_hi function at noon (PST) on the day the run 
+is started and the next day.  If run after noon (PST) it will trigger the 
+next day and the day after.
+
+```python
+def print_hi():
+    now = dt.now()
+    print('Hi {}!  It is currently {}'.format('No Kwargs ', now))
+
+RunOnTimer(
+    print_hi,
+    frequency='daily',
+    trigger_time='12:00:00',
+    iterations=2,
+    stop_date=None,
+    fail_check=False,
+    fail_check_responses=None,
+    tz='America/Los_Angeles'
+)
+```
+
+To run the print_hi function daily at noon until the 15th of June providing
+kwargs to the print_hi function.  If this is run prior to noon it will
+trigger the print_hi function at noon (PST) on the day the run is started 
+and the next day.  If run after noon (PST) it will trigger the next day and 
+the day after.
+
+```python
+def print_hi(**kwargs):
+    now = dt.now()
+    print('Hi {}!  It is currently {}'.format(kwargs['name'], now))
+
+RunOnTimer(
+    print_hi,
+    frequency='daily',
+    trigger_time='12:00:00',
+    iterations=None,
+    stop_date="2020/06/15",
+    fail_check=False,
+    fail_check_responses=None,
+    tz='America/Los_Angeles',
+    params={'name':'David'}
+)
+```
+
 ***
 
 ## Updates
 
 ***
+### v.0.7 - 2020-12-01 - Change Error Output
+
+* Altered the way TypeErrors output to both include the actual error text and deal with an indent issue
+
 
 ### v.0.6 - 2020-10-07 - Fixed kwargs["params"]
 
