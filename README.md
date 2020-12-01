@@ -13,11 +13,7 @@ As of version 0.6 the timer is timezone aware defaulting to utc.
 
 ***
 
-To run the print_hi function daily for the next two days at noon without
-providing any kwargs to the print hi function.  If this is run prior to
-noon it will trigger the print_hi function at noon (PST) on the day the run 
-is started and the next day.  If run after noon (PST) it will trigger the 
-next day and the day after.
+To run the print_hi function daily for the next two days at noon without providing any kwargs to the print hi function.  If this is run prior to noon it will trigger the print_hi function at noon (PST) on the day the run is started and the next day.  If run after noon (PST) it will trigger the next day and the day after.
 
 ```python
 def print_hi():
@@ -36,11 +32,7 @@ RunOnTimer(
 )
 ```
 
-To run the print_hi function daily at noon until the 15th of June providing
-kwargs to the print_hi function.  If this is run prior to noon it will
-trigger the print_hi function at noon (PST) on the day the run is started 
-and the next day.  If run after noon (PST) it will trigger the next day and 
-the day after.
+To run the print_hi function daily at noon until the 15th of June providing kwargs to the print_hi function.  If this is run prior to noon it will trigger the print_hi function at noon (PST) on the day the run is started and the next day.  If run after noon (PST) it will trigger the next day and the day after.
 
 ```python
 def print_hi(**kwargs):
@@ -65,10 +57,10 @@ RunOnTimer(
 ## Updates
 
 ***
+
 ### v.0.7 - 2020-12-01 - Change Error Output
 
 * Altered the way TypeErrors output to both include the actual error text and deal with an indent issue
-
 
 ### v.0.6 - 2020-10-07 - Fixed kwargs["params"]
 
