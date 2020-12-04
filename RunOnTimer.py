@@ -1,3 +1,4 @@
+# %%
 "A flexible wrapper for running a function a set, timzone aware, interval"
 import pytz
 
@@ -8,7 +9,7 @@ from datetime import timedelta as td
 from dateutil.relativedelta import relativedelta as rd
 from time import sleep
 
-
+# %%
 class RunOnTimer:
     """Run the 'function_to_run' at the provided interval.  If the fail_check
     parameter is provided, the function will check the dict of
@@ -340,7 +341,7 @@ class RunOnTimer:
                 if run_time > dt.now():
                     sleep((self.tz.localize(run_time) - self.tz.localize(dt.now())).total_seconds())
                 else:
-                    sleep((self.tz.localize(dt.now()+td(hours=19))-self.tz.localize(dt.now())))
+                    sleep((self.tz.localize(dt.now()+td(hours=19))-self.tz.localize(dt.now())).total_seconds())
                     self.check_time()
                 return 1
         except TypeError as t:
