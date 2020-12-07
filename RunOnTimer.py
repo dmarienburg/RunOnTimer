@@ -283,7 +283,7 @@ class RunOnTimer:
         elif self.tz.localize(self.last_run + delta_value).date() <= self.tz.localize(dt.now()).date():
             return 1
         elif self.tz.localize(self.last_run + delta_value).date() > self.tz.localize(dt.now()).date():
-            sleep((self.tz.localize(self.last_run + delta_value) - self.tz.localize(dt.now()).date()).total_seconds())
+            sleep((self.tz.localize(self.last_run + delta_value) - self.tz.localize(dt.now())).total_seconds())
             return 1
         else:
             return 0
