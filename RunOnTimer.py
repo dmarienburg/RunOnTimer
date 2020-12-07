@@ -144,14 +144,14 @@ class RunOnTimer:
                                 self.function(self.params)
                             else:
                                 self.function()
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
                         else:
                             self.check_date()
                             if self.params:
                                 self.function(self.params)
                             else:
                                 self.function()
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
                 else:
                     while self.check_stop_date() == 1:
                             if self.trigger_time:
@@ -161,14 +161,14 @@ class RunOnTimer:
                                     self.function(self.params)
                                 else:
                                     self.function()
-                                self.last_run = dt.now().date()
+                                self.last_run = dt.now()
                             else:
                                 self.check_date()
                                 if self.params:
                                     self.function(self.params)
                                 else:
                                     self.function()
-                                self.last_run = dt.now().date()
+                                self.last_run = dt.now()
             else:
                 if not self.stop_date:
                     while self.current_iteration != self.iterations:
@@ -180,7 +180,7 @@ class RunOnTimer:
                             else:
                                 self.function()
                             self.current_iteration += 1
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
                         else:
                             self.check_date()
                             if self.params:
@@ -188,7 +188,7 @@ class RunOnTimer:
                             else:
                                 self.function()
                             self.current_iteration += 1
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
                 else:
                     while (self.check_stop_date() == 1) and (self.current_iteration != self.iterations):
                         if self.trigger_time:
@@ -199,7 +199,7 @@ class RunOnTimer:
                             else:
                                 self.function()
                             self.current_iteration += 1
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
                         else:
                             self.check_date()
                             if self.params:
@@ -207,7 +207,7 @@ class RunOnTimer:
                             else:
                                 self.function()
                             self.current_iteration += 1
-                            self.last_run = dt.now().date()
+                            self.last_run = dt.now()
 
     def create_class_vars(self):
         """
@@ -280,9 +280,9 @@ class RunOnTimer:
 
         if not self.last_run:
             return 1
-        elif self.tz.localize(self.last_run + delta_value) <= self.tz.localize(dt.now()).date():
+        elif self.tz.localize(self.last_run + delta_value).date() <= self.tz.localize(dt.now()).date():
             return 1
-        elif self.tz.localize(self.last_run + delta_value) > self.tz.localize(dt.now()).date():
+        elif self.tz.localize(self.last_run + delta_value).date() > self.tz.localize(dt.now()).date():
             sleep((self.tz.localize(self.last_run + delta_value) - self.tz.localize(dt.now()).date()).total_seconds())
             return 1
         else:
@@ -392,3 +392,5 @@ class RunOnTimer:
                     "parameter was not a string")
             else:
                 return 1
+
+# %%
