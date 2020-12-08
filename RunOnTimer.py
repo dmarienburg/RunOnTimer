@@ -214,35 +214,35 @@ class RunOnTimer:
         Fill the class variables from the **kwargs values
         """
         if "frequency" in self.kwargs.keys():
-            self.frequency = self.kwargs["frequency"]
+            self.frequency = self.kwargs.pop("frequency")
         else:
             pass
         if "trigger_time" in self.kwargs.keys():
-            self.trigger_time = self.kwargs["trigger_time"]
+            self.trigger_time = self.kwargs.pop("trigger_time")
         else:
             pass
         if "iterations" in self.kwargs.keys():
-            self.iterations = self.kwargs["iterations"]
+            self.iterations = self.kwargs.pop("iterations")
         else:
             pass
         if "stop_date" in self.kwargs.keys():
-            self.stop_date = self.kwargs["stop_date"]
+            self.stop_date = self.kwargs.pop("stop_date")
         else:
             pass
         if "fail_check" in self.kwargs.keys():
-            self.fail_check = self.kwargs["fail_check"]
+            self.fail_check = self.kwargs.pop("fail_check")
         else:
             pass
         if "fail_check_responses" in self.kwargs.keys():
-            self.fail_check_responses = self.kwargs["fail_check_responses"]
-        else:
-            pass
-        if "params" in self.kwargs.keys():
-            self.params = self.kwargs["params"]
+            self.fail_check_responses = self.kwargs.pop("fail_check_responses")
         else:
             pass
         if "tz" in self.kwargs.keys():
-            self.tz = pytz.timezone(self.kwargs["tz"])
+            self.tz = pytz.timezone(self.kwargs.pop("tz"))
+        else:
+            pass
+        if "params" in self.kwargs.keys():
+            self.params = self.kwargs
         else:
             pass
 
